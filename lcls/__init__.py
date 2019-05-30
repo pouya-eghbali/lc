@@ -117,7 +117,7 @@ def has_hidden_attribute(filepath):
 def main():
     rules = get_rules()
     argv = sys.argv[1:]
-    directories = [arg for arg in argv if not arg.startswith('-')]
+    directories = [arg for arg in argv if not arg.startswith('-')] or ['.']
     options = [option for arg in argv if arg.startswith('-') for option in arg[1:]]
     for index, directory in enumerate(directories):
         with os.scandir(directory) as scan:

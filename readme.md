@@ -19,6 +19,7 @@ lcls -[al] [directory]
 ```
 
 Multiple directories can be provided. Currently lc recognizes `-a` and `-l` options.
+Directory is optional (defaults to current working directory)
 
 ## Configuration
 
