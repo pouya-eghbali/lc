@@ -2,6 +2,8 @@
 
 `lc` is `ls` but with colors and icons.
 
+![lc screenshot](https://github.com/pouya-eghbali/lc/raw/master/lc.png)
+
 ## Install
 
 To install do
