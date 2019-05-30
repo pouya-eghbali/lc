@@ -29,7 +29,7 @@ Directory is optional (defaults to current working directory)
 
 To customize icons and colors you can copy `.lc.rules.yaml` to your home folder and modify its contents.
 
-For color, either provide a (number (8bit color number))[https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit],
+For color, either provide a [number (8bit color number)](https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit),
 a list of numbers (rgb), or the color name.
 
 ## Dependencies
