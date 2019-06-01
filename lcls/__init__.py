@@ -130,7 +130,6 @@ def main():
         colorized_files = []
         for file in file_names:
             path = os.path.join(directory, file)
-            lstat = os.lstat(path)
             for rule in rules:
                 if re.search(rule, file):
                     color, icon = rules[rule]
