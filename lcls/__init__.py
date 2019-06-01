@@ -124,6 +124,7 @@ def main():
             files = [entry for entry in scan]
             if not 'a' in options:
                 files = [file for file in files if not is_hidden(directory, file.name)]
+        files = sorted(files, key = lambda e: e.name)
         file_names = [file.name for file in files]
         size = get_table_size(file_names)
         colorized_files = []
