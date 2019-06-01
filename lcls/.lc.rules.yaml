@@ -60,12 +60,12 @@
 
 # Git
 
-\.git$:          [cyan, "\uf1d3"]
+\.git$:          [green, "\uf1d3"]
 
 # Programming (Other)
 
-\.diff$:         [cyan, "\uf440"]
-^gruntfile.js$:  [cyan, "\ue74c"]
+\.diff$:         [red, "\uf440"]
+^gruntfile.js$:  [red, "\ue74c"]
 
 # Graphics
 
@@ -86,10 +86,10 @@
 
 # Current / Parent directories
 
-\.\.:            [cyan, "\uf115"]
-\.:              [cyan, "\uf115"]
+^\.\.$:          [blue, "\uf115"]
+^\.$:            [blue, "\uf115"]
 
 # Specials
 
-$file:           [white, "\uf15b"]
-$dir:            [white, "\uf115"]
+$file:           [blue, "\uf15b"]
+$dir:            [blue, "\uf115"]
