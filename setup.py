@@ -8,11 +8,11 @@ with open(path.join(this_directory, 'readme.md'), encoding='utf-8') as f:
 
 setup(
     name='lcls',
-    version="1.0.3",
+    version="1.0.4",
     packages=find_packages(),
     include_package_data=True,
     install_requires=["sty", "ruamel.yaml"],
-    entry_points = {
+    entry_points={
         'console_scripts': ['lcls=lcls:main'],
     },
     long_description=long_description,
