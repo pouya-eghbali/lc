@@ -7,15 +7,18 @@ import grp
 import stat
 import itertools
 from datetime import datetime
-from ruamel import yaml
+from ruamel.yaml import YAML
+
 
 def get_rules():
+    yaml = YAML(typ='safe', pure=True)
     try:
-        return yaml.safe_load(open('~/.lc.rules.yaml'))
+        return yaml.load(open('~/.lc.rules.yaml'))
     except:
         this_directory = os.path.abspath(os.path.dirname(__file__))
         default_config = os.path.join(this_directory, '.lc.rules.yaml')
-        return yaml.safe_load(open(default_config))
+        return yaml.load(open(default_config))
+
 
 def colorize(color, icon, file):
     if type(color) == list:
@@ -24,12 +27,14 @@ def colorize(color, icon, file):
         color = sty.fg(color)
     return f'{color}{icon} {file}{sty.fg.rs}'
 
+
 def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i+n]
 
+
 def get_terminal_size(fallback=(80, 24)):
-    for i in range(0,3):
+    for i in range(0, 3):
         try:
             columns, rows = os.get_terminal_size(i)
         except OSError:
@@ -39,20 +44,23 @@ def get_terminal_size(fallback=(80, 24)):
         columns, rows = fallback
     return columns, rows
 
+
 def get_table_size(table):
     width, _ = get_terminal_size()
     for i in reversed(range(1, 11)):
         rows = list(chunks(table, i))
         cols = itertools.zip_longest(*rows, fillvalue='')
-        col_widths = [max(len(item) + 4  for item in col) for col in cols]
+        col_widths = [max(len(item) + 4 for item in col) for col in cols]
         row_width = sum(col_widths) - 2
         item_widths = [[len(item) + 2 for item in row] for row in rows]
         if row_width <= width:
             return i, col_widths, item_widths
 
+
 def lpad_equal(items):
     pad_size = max(len(item) for item in items)
     return [item.rjust(pad_size, ' ') for item in items]
+
 
 perm_map = {
     "0": "---",
@@ -65,14 +73,17 @@ perm_map = {
     "7": "rwx",
 }
 
+
 def num2sym(num):
     return perm_map[num]
+
 
 def get_perm(file):
     octal = str(oct(stat.S_IMODE(file.stat().st_mode)))[2:]
     isdir = file.is_dir()
     perm = isdir and 'd' or '-'
     return perm + ''.join(map(num2sym, octal))
+
 
 def print_with_options(files, colorized_files, size, options):
     rows = chunks(colorized_files, size[0])
@@ -86,9 +97,11 @@ def print_with_options(files, colorized_files, size, options):
         # permissions
         permissions = map(get_perm, files)
         # zip all the info
-        zipped = zip(files, sizes, users, groups, nlinks, permissions, colorized_files)
+        zipped = zip(files, sizes, users, groups, nlinks,
+                     permissions, colorized_files)
         for file, size, user, group, nlink, permission, colorized in zipped:
-            last_modified = datetime.utcfromtimestamp(file.stat().st_mtime).strftime('%b %d %H:%M').replace(' 0', '  ')
+            last_modified = datetime.utcfromtimestamp(
+                file.stat().st_mtime).strftime('%b %d %H:%M').replace(' 0', '  ')
             print(f'{permission} {nlink} {user} {group} {size} {last_modified} {colorized}')
     else:
         for row_number, row in enumerate(rows):
@@ -103,10 +116,12 @@ def print_with_options(files, colorized_files, size, options):
                 new_row.append(new_item)
             print('  '.join(new_row))
 
+
 def is_hidden(directory, filename):
     filepath = os.path.join(directory, filename)
     name = os.path.basename(os.path.abspath(filepath))
     return name.startswith('.') or has_hidden_attribute(filepath)
+
 
 def has_hidden_attribute(filepath):
     try:
@@ -114,17 +129,20 @@ def has_hidden_attribute(filepath):
     except:
         return False
 
+
 def main():
     rules = get_rules()
     argv = sys.argv[1:]
     directories = [arg for arg in argv if not arg.startswith('-')] or ['.']
-    options = [option for arg in argv if arg.startswith('-') for option in arg[1:]]
+    options = [option for arg in argv if arg.startswith(
+        '-') for option in arg[1:]]
     for index, directory in enumerate(directories):
         with os.scandir(directory) as scan:
             files = [entry for entry in scan]
             if not 'a' in options:
-                files = [file for file in files if not is_hidden(directory, file.name)]
-        files = sorted(files, key = lambda e: e.name)
+                files = [file for file in files if not is_hidden(
+                    directory, file.name)]
+        files = sorted(files, key=lambda e: e.name)
         file_names = [file.name for file in files]
         size = get_table_size(file_names)
         colorized_files = []
@@ -149,6 +167,7 @@ def main():
         print_with_options(files, colorized_files, size, options)
         if len(directories) > 1 and index != len(directories) - 1:
             print()
+
 
 if __name__ == '__main__':
     main()
